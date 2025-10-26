@@ -1,5 +1,11 @@
 import createHttpError from 'http-errors';
 import { UserDB } from '../db/models/userSchema';
+import {
+  getFullNameFromGoogleTokenPayload,
+  GoogleTokenPayload,
+  validateCode,
+} from '../utils/verifyGoogleToken';
+import bcrypt from 'bcrypt';
 
 export const signupUser = async (data: { name: string; email: string; password: string }) => {
   const { name, email, password } = data;
@@ -20,4 +26,23 @@ export const loginUser = async (data: { email: string; password: string }) => {
   if (!isPasswordValid) throw createHttpError(401, 'Invalid password');
 
   return { user };
+};
+
+export const googleAuth = async (code: string) => {
+  const ticket = await validateCode(code);
+  const rawPayload = ticket.getPayload();
+  if (!rawPayload || !rawPayload.email) {
+    throw new Error('Unauthorized');
+  }
+  const payload = rawPayload as unknown as GoogleTokenPayload;
+  let user = await UserDB.findOne({ email: payload.email });
+  if (!user) {
+    const password = await bcrypt.hash(Math.random().toString(36).slice(-8), 10);
+    user = await UserDB.create({
+      name: getFullNameFromGoogleTokenPayload(payload),
+      email: payload.email,
+      password,
+    });
+  }
+  return user;
 };
