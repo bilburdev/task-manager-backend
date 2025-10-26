@@ -12,7 +12,11 @@ export const setupServer = () => {
 
   app.use(
     cors({
-      origin: 'http://localhost:3000',
+      origin: [
+        'http://localhost:3000',
+        'https://task-manager-three-ochre-89.vercel.app',
+        'https://task-manager-backend-dif5.onrender.com',
+      ],
       credentials: true,
     })
   );
