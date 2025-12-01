@@ -14,6 +14,6 @@ authRouter.post('/signup', signupCtrl);
 authRouter.delete('/logout', logoutCtrl);
 
 authRouter.get('/google/url', getGoogleOAuthUrlController);
-authRouter.post('/confirm-google-auth', googleAuthCtrl);
+authRouter.post('/google/confirm', googleAuthCtrl);
 
 export default authRouter;
