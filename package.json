@@ -8,7 +8,7 @@
     "prettier": "npx prettier . --write"
   },
   "keywords": [],
-  "author": "Dmytrii Tsybuliak <tonistark1997@gmail.com>",
+  "author": "Dmytrii",
   "license": "ISC",
   "description": "",
   "devDependencies": {

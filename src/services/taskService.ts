@@ -48,7 +48,7 @@ export const updateTaskById = async (userId: string, id: string, data: UpdateTas
       subtasks,
       userId,
     },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   ).select('-createdAt -updatedAt -userId');
 };
 
@@ -90,8 +90,17 @@ export interface ITask {
   isCompleted: boolean;
 }
 
-export const getFilteredTasks = async (userId: string, search?: string): Promise<ITask[]> => {
+export const getFilteredTasks = async (
+  userId: string,
+  search?: string,
+  status?: string
+): Promise<ITask[]> => {
   const query: FilterQuery<ITask> = { userId };
+  if (status === 'completed') {
+    query.isCompleted = true;
+  } else if (status === 'incomplete') {
+    query.isCompleted = false;
+  }
 
   if (search) {
     query.$or = [

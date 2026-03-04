@@ -100,15 +100,9 @@ export const getAllTasksCtrl: Controller = async (req, res) => {
   }
 
   const search = req.query.search as string | undefined;
-  const tasks = await getFilteredTasks(userId, search);
+  const status = req.query.status as 'all' | 'completed' | 'incomplete' | undefined;
 
-  if (!tasks || tasks.length === 0) {
-    res.status(404).json({
-      status: 404,
-      message: 'Tasks not found',
-    });
-    return;
-  }
+  const tasks = await getFilteredTasks(userId, search, status);
 
   res.status(200).json({
     status: 200,
